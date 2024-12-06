@@ -1,0 +1,46 @@
+﻿@using music4you.Data
+@using music4you.ViewModels
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model AlbumCreateViewModel
+
+@if (TempData["Error"] != null)
+{
+    <div class="col-md-12 alert alert-danger">
+        <span><b>Błąd!</b> - @TempData["Error"] </span>
+    </div>
+}
+<form method="post" asp-action="Create">
+    <div class="form-group mb-3">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control">
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Author"></label>
+        <input asp-for="Author" class="form-control">
+        <span asp-validation-for="Author" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3" style="width: 150px;">
+        <label asp-for="Genre"></label>
+        <select asp-for="Genre" asp-items="@Html.GetEnumSelectList<Genre>()" class="form-control">
+        </select>
+    </div>
+    <div class="form-group mb-3" style="width: 150px;">
+        <label asp-for="Year"></label>
+        <input asp-for="Year" class="form-control">
+        <span asp-validation-for="Year" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="ImageUrl"></label>
+        <input asp-for="ImageUrl" class="form-control">
+        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3 text-center">
+        <input class="btn btn-outline-success" type="submit" value="Dodaj album" />
+    </div>
+    
+</form>
