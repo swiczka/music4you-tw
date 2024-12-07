@@ -26,9 +26,18 @@ namespace music4you.Repository
             return albums;
         }
 
+        public async Task<Rating> GetUserRating(int albumId, string userId)
+        {
+            var rating = await _context.Ratings
+                .FirstOrDefaultAsync(a => a.AlbumId == albumId && a.AppUserId == userId);
+            return rating;
+        }
+
         public async Task<Album> GetById(int id)
         {
-            var album = await _context.Albums.FirstOrDefaultAsync(x => x.Id == id);
+            var album = await _context.Albums
+                .Include(a => a.Ratings)
+                .FirstOrDefaultAsync(x => x.Id == id);
             return album;
         }
 

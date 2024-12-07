@@ -23,11 +23,20 @@
         </div>
     </div>
 </section>
-
+<form method="get" asp-action="Index">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Wpisz nazwę albumu..." name="search" value="@Context.Request.Query["search"]"/>
+        <button class="btn btn-primary" type="submit">Szukaj</button>
+    </div>
+</form>
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
-
+        @if(Model.Count == 0)
+        {
+            <h1 class="text-center">Nie znaleziono albumu o takiej nazwie</h1>
+        }
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            
             @foreach (Album album in Model)
             {
                 string url;
@@ -43,10 +52,9 @@
                     <div class="card shadow-sm" style="border-radius: 4px 20px 20px 20px;">
                         <img src=@url alt="Obraz przedstawiający @album.Name" width=100% height=100% style="border-radius: 4px 20px 4px 4px" />
                         <div class="card-body">
-                            <p class="card-text">@album.Author - @album.Name</p>
+                            <a asp-area="" asp-controller="Album" asp-action="Details" asp-route-id="@album.Id" class="card-text link-dark">@album.Author - @album.Name</a>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <a type="button" asp-controller="Album" asp-action="Details" asp-route-id=@album.Id class="btn btn-sm btn-outline-secondary">Szczegóły</a>
                                     @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
                                     {
                                         <a type="button" asp-controller="Album" asp-action="Edit" asp-route-id=@album.Id class="btn btn-sm btn-outline-secondary">Edytuj</a>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using music4you.Data;
 using music4you.Interface;
 using music4you.Models;
@@ -10,10 +11,12 @@ namespace music4you.Controllers
     public class AlbumController : Controller
     {
         private readonly IAlbumRepository _albumRepository;
+        private readonly UserManager<AppUser> _userManager;
 
-        public AlbumController(IAlbumRepository albumRepository) 
+        public AlbumController(IAlbumRepository albumRepository, UserManager<AppUser> userManager) 
         {
             _albumRepository = albumRepository;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index(string? search)
@@ -28,6 +31,36 @@ namespace music4you.Controllers
                 var albums = await _albumRepository.GetFilteredByName(search);
                 return View(albums);
             }
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            Album album = await _albumRepository.GetById(id);
+            string userId = _userManager.GetUserId(User);
+
+            if(userId != null)
+            {
+                Rating userRating = await _albumRepository.GetUserRating(id, userId);
+                AlbumViewModel vm = new AlbumViewModel()
+                {
+                    Id = id,
+                    Name = album.Name,
+                    Author = album.Author,
+                    Year = album.Year,
+                    Genre = album.Genre,
+                    ImageUrl = album.ImageUrl,
+                    Ratings = album.Ratings.ToList(),
+                    UserRating = userRating
+                };
+                return View(vm);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            
+
+            
         }
 
         public IActionResult Create()

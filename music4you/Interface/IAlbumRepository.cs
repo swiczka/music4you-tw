@@ -11,5 +11,6 @@ namespace music4you.Interface
         bool Delete(Album album);
         bool Save();
         Task<IEnumerable<Album>> GetFilteredByName(string name);
+        Task<Rating> GetUserRating(int albumId, string userId);
     }
 }

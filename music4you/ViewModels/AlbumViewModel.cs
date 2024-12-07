@@ -1,4 +1,5 @@
 ﻿using music4you.Data;
+using music4you.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace music4you.ViewModels
@@ -11,5 +12,7 @@ namespace music4you.ViewModels
         public int Year { get; set; }
         public Genre Genre { get; set; }
         public string ImageUrl { get; set; }
+        public List<Rating> ?Ratings { get; set; }
+        public Rating ?UserRating { get; set; }
     }
 }

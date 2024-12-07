@@ -1,0 +1,139 @@
+﻿@using music4you.ViewModels
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model AlbumViewModel
+
+<div class="main-container">
+    <section class="bg-white space-sm">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-sm-0 shadow rounded">
+                    <img alt="Image" id="mainImage" src="@Model.ImageUrl" class="rounded img-fluid mt-2" style="width: 100%;" />
+                    <p class="lead mt-4"><b>Wykonawca:</b> @Model.Author</p>
+                    <p class="lead"><b>Nazwa:</b> @Model.Name</p>
+                    <p class="lead"><b>Rok wydania:</b> @Model.Year</p>
+                    <p class="lead"><b>Gatunek:</b> @Model.Genre</p>
+                    <i class="lead"><b>Ocena użytkowników </b>(@Model.Ratings.Count):</i>
+                    @if (Model.Ratings == null || Model.Ratings.Count == 0)      
+                    {
+                        <div class="text-center">
+                            @for (int i = 0; i < 10; i++)
+                            {
+                                <i class="bi bi-star text-warning" style="font-size: 30px;"></i>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        double avg = Model.Ratings.Average(a => a.Value);
+                        double roundedAvg = Math.Round(avg * 2, MidpointRounding.AwayFromZero) / 2;
+                        int fullStars = (int)roundedAvg;
+                        bool hasHalfStar = roundedAvg - fullStars >= 0.5;
+
+                        <div class="text-center">
+                            @for(int j = 0; j < fullStars; j++)
+                            {
+                                <i class="bi bi-star-fill text-warning" style="font-size: 30px;"></i>
+                            }
+                            @if (hasHalfStar)
+                            {
+                                <i class="bi bi-star-half text-warning" style="font-size: 30px;"></i>
+                                for(int i = fullStars + 1; i < 10; i++)
+                                {
+                                    <i class="bi bi-star text-warning" style="font-size: 30px;"></i>
+                                }
+                            }
+                            else
+                            {
+                                for (int i = fullStars; i < 10; i++)
+                                {
+                                    <i class="bi bi-star text-warning" style="font-size: 30px;"></i>
+                                }
+                            }
+                        </div>
+                    }
+                    <hr/>
+                    @if(Model.UserRating == null)
+                    {
+                        <i class="lead"><b>Wystaw ocenę albumu:</b></i>
+                        <div class="text-center">
+                            @for (int i = 0; i < 10; i++)
+                            {
+                                <a asp-area="" asp-controller="Rating" asp-action="Create" asp-route-albumId="@Model.Id" asp-route-value="@(i+1)" class="bi bi-star text-warning" style="font-size: 30px;"></a>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <i class="lead"><b>Zmień ocenę albumu:</b></i>
+                        <div class="text-center text-info">
+                            @for (int i = 0; i < Model.UserRating.Value; i++)
+                            {
+                                <a asp-area="" asp-controller="Rating" asp-action="Update" asp-route-albumId="@Model.Id" asp-route-ratingId="@Model.UserRating.Id" asp-route-value="@(i+1)" class="bi bi-star-fill text-warning" style="font-size: 30px;"></a>
+                            }
+                            @for (int i = Model.UserRating.Value; i < 10; i++)
+                            {
+                                <a asp-area="" asp-controller="Rating" asp-action="Update" asp-route-albumId="@Model.Id" asp-route-ratingId="@Model.UserRating.Id" asp-route-value="@(i+1)" class="bi bi-star text-warning" style="font-size: 30px;"></a>
+                            }
+                        </div>
+                    }
+
+                    
+                </div>
+                
+                
+
+                <div class="col-lg-8 d-flex flex-column justify-content-between mr-auto ml-auto">
+                    @if (ViewData["Error"] != null)
+                    {
+                        <div class="alert-danger">
+                            <p class="alert-danger">@ViewData["Error"]</p>
+                        </div>
+                    }
+                    <div class="mb-3">
+
+
+                        <div class="mt-5 mb-5">
+                            <p class="lead"><b>Materiały:</b></p>
+                            <ul>
+                                <li>element listy 1</li>
+                                <li>element listy 2</li>
+                            </ul>
+                        </div>
+
+
+                        <div class="row mb-4">
+                            <p class="lead" id="variantName"><b>Wariant:</b> cos</p>
+                        </div>
+
+                        <p class="lead">Wybierz rozmiar:</p>
+                        <div class="mb-3" id="sizesContainer">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="btn-group mb-2">
+                            <input type="hidden" id="selectedVariantIndex" name="SelectedVariantIndex" value="0" />
+
+                        </div>
+
+                    </div>
+                    <div id="cartAlert">
+                    </div>
+                </div>
+                <!--end of col-->
+            </div>
+            <!--end of row-->
+        </div>
+        <!--end of container-->
+    </section>
+    <!--end of section-->
+    <section class="bg-white space-sm">
+        <hr />
+        <div class="container">
+            <h4>O produkcie</h4>
+        </div>
+    </section>
+</div>
