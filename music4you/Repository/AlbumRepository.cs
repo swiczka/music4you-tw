@@ -36,7 +36,16 @@ namespace music4you.Repository
         public async Task<Album> GetById(int id)
         {
             var album = await _context.Albums
+                .FirstOrDefaultAsync(x => x.Id == id);
+            return album;
+        }
+
+        public async Task<Album> GetByIdExtended(int id)
+        {
+            var album = await _context.Albums
                 .Include(a => a.Ratings)
+                .Include(b => b.Reviews)
+                    .ThenInclude(c => c.AppUser)
                 .FirstOrDefaultAsync(x => x.Id == id);
             return album;
         }

@@ -12,5 +12,6 @@ namespace music4you.Interface
         bool Save();
         Task<IEnumerable<Album>> GetFilteredByName(string name);
         Task<Rating> GetUserRating(int albumId, string userId);
+        Task<Album> GetByIdExtended(int id);
     }
 }

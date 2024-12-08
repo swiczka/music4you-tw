@@ -35,12 +35,13 @@ namespace music4you.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            Album album = await _albumRepository.GetById(id);
+            Album album = await _albumRepository.GetByIdExtended(id);
             string userId = _userManager.GetUserId(User);
 
             if(userId != null)
             {
                 Rating userRating = await _albumRepository.GetUserRating(id, userId);
+
                 AlbumViewModel vm = new AlbumViewModel()
                 {
                     Id = id,
@@ -50,13 +51,25 @@ namespace music4you.Controllers
                     Genre = album.Genre,
                     ImageUrl = album.ImageUrl,
                     Ratings = album.Ratings.ToList(),
+                    Reviews = album.Reviews.ToList(),
                     UserRating = userRating
                 };
                 return View(vm);
             }
             else
             {
-                return RedirectToAction("Login", "Account");
+                AlbumViewModel vm = new AlbumViewModel()
+                {
+                    Id = id,
+                    Name = album.Name,
+                    Author = album.Author,
+                    Year = album.Year,
+                    Genre = album.Genre,
+                    ImageUrl = album.ImageUrl,
+                    Ratings = album.Ratings.ToList(),
+                    Reviews = album.Reviews.ToList()
+                };
+                return View(vm);
             }
             
 

@@ -13,6 +13,7 @@ namespace music4you.ViewModels
         public Genre Genre { get; set; }
         public string ImageUrl { get; set; }
         public List<Rating> ?Ratings { get; set; }
+        public List<Review> ?Reviews { get; set; }
         public Rating ?UserRating { get; set; }
     }
 }

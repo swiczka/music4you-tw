@@ -9,9 +9,9 @@
 <div class="main-container">
     <section class="bg-white space-sm">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-4 mb-4 mb-sm-0 shadow rounded">
-                    <img alt="Image" id="mainImage" src="@Model.ImageUrl" class="rounded img-fluid mt-2" style="width: 100%;" />
+            <div class="row gx-5">
+                <div class="col-lg-4 mb-4 shadow rounded">
+                    <img alt="Image" id="mainImage" src="@Model.ImageUrl" class="rounded img-fluid mt-4" style="width: 100%;" />
                     <p class="lead mt-4"><b>Wykonawca:</b> @Model.Author</p>
                     <p class="lead"><b>Nazwa:</b> @Model.Name</p>
                     <p class="lead"><b>Rok wydania:</b> @Model.Year</p>
@@ -86,42 +86,60 @@
                 
                 
 
-                <div class="col-lg-8 d-flex flex-column justify-content-between mr-auto ml-auto">
+                <div class="col-lg-8 d-flex flex-column mr-auto ml-auto">
                     @if (ViewData["Error"] != null)
                     {
                         <div class="alert-danger">
                             <p class="alert-danger">@ViewData["Error"]</p>
                         </div>
                     }
-                    <div class="mb-3">
 
+                    <h2 class="mb-3">Wybrane recenzje albumu</h2>
 
-                        <div class="mt-5 mb-5">
-                            <p class="lead"><b>Materiały:</b></p>
-                            <ul>
-                                <li>element listy 1</li>
-                                <li>element listy 2</li>
-                            </ul>
+                    @foreach(Review review in Model.Reviews)
+                    {
+                        <div class="mb-3">
+                            <div class="container shadow rounded">
+                                <div class="d-flex justify-content-between">
+                                    <div class="mt-4">
+                                        <p>Autor: @review.AppUser.UserName    <span class="text-muted">     (@review.CreatedAt.ToShortDateString())</span></p>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        @for (int i = 0; i < review.Value; i++)
+                                        {
+                                            <i class="bi bi-star-fill text-warning" style="font-size: 30px;"></i>
+                                        }
+                                        @for (int i = review.Value; i < 10; i++)
+                                        {
+                                            <i class="bi bi-star text-warning" style="font-size: 30px;"></i>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h3>@review.Title</h3>
+                                    @if(review.Content.Length > 500)
+                                    {
+                                        <p>@review.Content.Substring(0, 500) ...</p>
+                                    }
+                                    else
+                                    {
+                                        <p>@review.Content</p>
+                                    }
+
+                                </div>
+                                <div class="p-2 text-end">
+                                    <a asp-area="" asp-controller="Review" asp-action="Details" asp-route-id="@review.Id">Czytaj całość</a>
+                                </div>
+                            </div>
                         </div>
-
-
-                        <div class="row mb-4">
-                            <p class="lead" id="variantName"><b>Wariant:</b> cos</p>
-                        </div>
-
-                        <p class="lead">Wybierz rozmiar:</p>
-                        <div class="mb-3" id="sizesContainer">
-                        </div>
+                    }
+                    <div class="form-control-plaintext text-center">
+                        <a type="button" class="btn btn-primary" asp-area="" asp-controller="Review" asp-action="Create" asp-route-albumId="@Model.Id">Dodaj recenzję</a>
                     </div>
-                    <div>
-                        <div class="btn-group mb-2">
-                            <input type="hidden" id="selectedVariantIndex" name="SelectedVariantIndex" value="0" />
-
-                        </div>
-
-                    </div>
-                    <div id="cartAlert">
-                    </div>
+              
+                    
                 </div>
                 <!--end of col-->
             </div>
@@ -132,8 +150,5 @@
     <!--end of section-->
     <section class="bg-white space-sm">
         <hr />
-        <div class="container">
-            <h4>O produkcie</h4>
-        </div>
     </section>
 </div>
