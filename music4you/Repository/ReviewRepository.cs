@@ -31,7 +31,9 @@ namespace music4you.Repository
 
         public async Task<Review> GetById(int id)
         {
-            Review review = await _context.Reviews.FirstOrDefaultAsync(r => r.Id == id);
+            Review review = await _context.Reviews
+                 .Include(a => a.AppUser)
+                .FirstOrDefaultAsync(r => r.Id == id);
             return review;
         }
 

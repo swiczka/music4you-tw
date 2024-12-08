@@ -1,0 +1,45 @@
+﻿@using music4you.ViewModels
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model ReviewViewModel
+
+<div class="mb-3">
+    <div class="container shadow rounded">
+        <div class="d-flex justify-content-between">
+            <div class="mt-4">
+                <p>Autor: @Model.AppUser.UserName    <span class="text-muted">     (@Model.CreatedAt.ToShortDateString())</span></p>
+            </div>
+
+            <div class="mt-3">
+                @for (int i = 0; i < Model.Value; i++)
+                {
+                    <i class="bi bi-star-fill text-warning" style="font-size: 30px;"></i>
+                }
+                @for (int i = Model.Value; i < 10; i++)
+                {
+                    <i class="bi bi-star text-warning" style="font-size: 30px;"></i>
+                }
+            </div>
+        </div>
+
+        <div class="p-2">
+            <h3>@Model.Title</h3>   
+            <p>@Model.Content</p>
+        </div>
+    </div>
+
+    <h2 class="p-3">Komentarze</h2>
+    <form asp-area="" asp-controller="Comment" asp-action="Create" asp-route-reviewId="@Model.Id">
+        <div class="form-group mb-3">
+            <label asp-for="Comment"></label>
+            <textarea asp-for="Comment" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Comment" class="text-danger"></span>
+        </div>
+        <input type="hidden" asp-for="Id" value="@Model.Id"/>
+        <input type="hidden" asp-for="AlbumId" value="@Model.Id" />
+        <button type="submit" class="btn btn-outline-success">Dodaj komentarz</button>
+    </form>
+</div>

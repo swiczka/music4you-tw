@@ -16,5 +16,6 @@ namespace music4you.Models
         public string AppUserId { get; set; }
         public AppUser AppUser { get; set; }
         public DateTime CreatedAt { get; set; }
+        public IEnumerable<Comment> ?Comments { get; set; }
     }
 }

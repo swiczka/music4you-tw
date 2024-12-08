@@ -259,9 +259,6 @@ namespace music4you.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AlbumId")
-                        .HasColumnType("int");
-
                     b.Property<string>("AppUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -273,11 +270,14 @@ namespace music4you.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("ReviewId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AlbumId");
-
                     b.HasIndex("AppUserId");
+
+                    b.HasIndex("ReviewId");
 
                     b.ToTable("Comments");
                 });
@@ -400,21 +400,21 @@ namespace music4you.Migrations
 
             modelBuilder.Entity("music4you.Models.Comment", b =>
                 {
-                    b.HasOne("music4you.Models.Album", "Album")
-                        .WithMany()
-                        .HasForeignKey("AlbumId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("music4you.Models.AppUser", "AppUser")
                         .WithMany()
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Album");
+                    b.HasOne("music4you.Models.Review", "Review")
+                        .WithMany("Comments")
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("AppUser");
+
+                    b.Navigation("Review");
                 });
 
             modelBuilder.Entity("music4you.Models.Rating", b =>
@@ -441,7 +441,7 @@ namespace music4you.Migrations
                     b.HasOne("music4you.Models.Album", "Album")
                         .WithMany("Reviews")
                         .HasForeignKey("AlbumId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("music4you.Models.AppUser", "AppUser")
@@ -467,6 +467,11 @@ namespace music4you.Migrations
                     b.Navigation("Ratings");
 
                     b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("music4you.Models.Review", b =>
+                {
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

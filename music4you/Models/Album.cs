@@ -14,7 +14,7 @@ namespace music4you.Models
         public int Year { get; set; }
         public Genre Genre { get; set; }
         public string ImageUrl { get; set; }
-        public IEnumerable<Rating> Ratings { get; set; }
-        public IEnumerable<Review> Reviews { get; set; }
+        public IEnumerable<Rating> ?Ratings { get; set; }
+        public IEnumerable<Review> ?Reviews { get; set; }
     }
 }

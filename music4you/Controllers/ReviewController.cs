@@ -69,5 +69,22 @@ namespace music4you.Controllers
             return View(vm);
 
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            Review review = await _reviewRepository.GetById(id);
+            ReviewViewModel vm = new ReviewViewModel()
+            {
+                Id = id,
+                Title = review.Title,
+                Content = review.Content,
+                Value = review.Value,
+                Album = review.Album,
+                AlbumId= review.AlbumId,
+                CreatedAt = review.CreatedAt,
+                AppUser = review.AppUser
+            };
+            return View(vm);
+        }
     }
 }
