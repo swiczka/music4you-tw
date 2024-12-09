@@ -27,6 +27,7 @@ namespace music4you.Controllers
             }
             if (!ModelState.IsValid)
             {
+                ViewData["Error"] = "Treść jest niepoprawna";
                 return RedirectToAction("Details", "Review", new { id = vm.Id });
             }
 
@@ -43,7 +44,7 @@ namespace music4you.Controllers
             }
             else
             {
-                //nie udalo sie
+                ViewData["Error"] = "Nie udało się dodać komentarza do bazy";
                 return RedirectToAction("Details", "Review", new { id = vm.Id });
             }
         }

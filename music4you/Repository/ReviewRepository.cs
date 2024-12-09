@@ -37,6 +37,16 @@ namespace music4you.Repository
             return review;
         }
 
+        public async Task<Review> GetByIdWithComments(int id)
+        {
+            Review review = await _context.Reviews
+                 .Include(a => a.AppUser)
+                 .Include(b => b.Comments)
+                    .ThenInclude(c => c.AppUser)
+                .FirstOrDefaultAsync(r => r.Id == id);
+            return review;
+        }
+
         public async Task<bool> Save()
         {
             return await _context.SaveChangesAsync() > 0;

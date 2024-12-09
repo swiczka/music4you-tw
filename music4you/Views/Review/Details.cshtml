@@ -40,6 +40,24 @@
         </div>
         <input type="hidden" asp-for="Id" value="@Model.Id"/>
         <input type="hidden" asp-for="AlbumId" value="@Model.Id" />
+        @if(ViewData["Error"] != null)
+        {
+            <span class="text-danger">@ViewData["Error"]</span>
+        }
         <button type="submit" class="btn btn-outline-success">Dodaj komentarz</button>
     </form>
+
+    @foreach(Comment comment in Model.Comments)
+    {
+        <div class="container bg-secondary bg-opacity-10 rounded-2">
+            <div class="mt-2">
+                <p>@comment.AppUser.UserName    <span class="text-muted">     (@comment.CreatedDate.ToShortDateString())</span></p>
+            </div>
+
+            <div class="p-2">
+                <p>@comment.Content</p>
+            </div>
+        </div>
+    }
+
 </div>

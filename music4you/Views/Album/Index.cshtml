@@ -52,14 +52,59 @@
                     <div class="card shadow-sm" style="border-radius: 4px 20px 20px 20px;">
                         <img src=@url alt="Obraz przedstawiający @album.Name" width=100% height=100% style="border-radius: 4px 20px 4px 4px" />
                         <div class="card-body">
-                            <a asp-area="" asp-controller="Album" asp-action="Details" asp-route-id="@album.Id" class="card-text link-dark">@album.Author - @album.Name</a>
                             <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
-                                    {
-                                        <a type="button" asp-controller="Album" asp-action="Edit" asp-route-id=@album.Id class="btn btn-sm btn-outline-secondary">Edytuj</a>
-                                    }
+                                <div>
+                                    <a asp-area="" asp-controller="Album" asp-action="Details" asp-route-id="@album.Id" class="card-text link-dark">@album.Author - @album.Name</a>
                                 </div>
+                                
+                                @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                                {
+                                <div class="btn-group">
+                                    <a type="button" asp-controller="Album" asp-action="Edit" asp-route-id=@album.Id class="btn btn-sm btn-outline-secondary">Edytuj</a>
+                                </div>
+                                }
+                                
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                @if (album.Ratings == null || album.Ratings.Count() == 0)
+                                {
+                                    <div class="text-center">
+                                        @for (int i = 0; i < 10; i++)
+                                        {
+                                            <i class="bi bi-star text-warning" style="font-size: 24px;"></i>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    double avg = album.Ratings.Average(a => a.Value);
+                                    double roundedAvg = Math.Round(avg * 2, MidpointRounding.AwayFromZero) / 2;
+                                    int fullStars = (int)roundedAvg;
+                                    bool hasHalfStar = roundedAvg - fullStars >= 0.5;
+
+                                    <div class="text-center">
+                                        @for (int j = 0; j < fullStars; j++)
+                                        {
+                                            <i class="bi bi-star-fill text-warning" style="font-size: 24px;"></i>
+                                        }
+                                        @if (hasHalfStar)
+                                        {
+                                            <i class="bi bi-star-half text-warning" style="font-size: 24px;"></i>
+                                            for (int i = fullStars + 1; i < 10; i++)
+                                            {
+                                                <i class="bi bi-star text-warning" style="font-size: 24px;"></i>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            for (int i = fullStars; i < 10; i++)
+                                            {
+                                                <i class="bi bi-star text-warning" style="font-size: 24px;"></i>
+                                            }
+                                        }
+                                    </div>
+                                }
+                                
                                 <p class="text-body-secondary" style="font-size: 20px">@album.Year</p>
                             </div>
                         </div>

@@ -9,5 +9,6 @@ namespace music4you.Interface
         Task<bool> Update(Review review);
         Task<bool> Delete(Review review);
         Task<bool> Save();
+        Task<Review> GetByIdWithComments(int id);
     }
 }

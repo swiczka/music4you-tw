@@ -16,13 +16,17 @@ namespace music4you.Repository
 
         public async Task<IEnumerable<Album>> GetAll()
         {
-            var albums = await _context.Albums.ToListAsync();
+            var albums = await _context.Albums
+                .Include(a => a.Ratings)
+                .OrderByDescending(a => a.Year).ToListAsync();
             return albums;
         }
 
         public async Task<IEnumerable<Album>> GetFilteredByName(string name)
         {
-            var albums = await _context.Albums.Where(a => a.Name.Contains(name)).ToListAsync();
+            var albums = await _context.Albums
+                .Include (a => a.Ratings)
+                .Where(a => a.Name.Contains(name)).ToListAsync();
             return albums;
         }
 
