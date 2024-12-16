@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using music4you.Data;
+using music4you.Interface;
 using music4you.Models;
 using music4you.ViewModels;
 
@@ -10,13 +11,33 @@ namespace music4you.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly ApplicationDbContext _context;
+        private readonly IReviewRepository _reviewRepository;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ApplicationDbContext context)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IReviewRepository reviewRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _context = context;
+            _reviewRepository = reviewRepository;
+        }
+
+        public async Task<IActionResult> Details() 
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var reviews = await _reviewRepository.GetByUserWithAlbumAsync(user.Id);
+
+            AccountDetailsViewModel vm = new AccountDetailsViewModel()
+            {
+                AppUser = user,
+                Reviews = reviews 
+            };
+
+            return View(vm);
         }
 
         public IActionResult Login()

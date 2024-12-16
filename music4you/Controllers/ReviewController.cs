@@ -72,7 +72,7 @@ namespace music4you.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            Review review = await _reviewRepository.GetByIdWithComments(id);
+            Review review = await _reviewRepository.GetByIdWithCommentsAsync(id);
             ReviewViewModel vm = new ReviewViewModel()
             {
                 Id = id,

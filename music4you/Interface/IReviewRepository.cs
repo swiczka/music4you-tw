@@ -4,11 +4,12 @@ namespace music4you.Interface
 {
     public interface IReviewRepository
     {
-        Task<Review> GetById(int id);
+        Task<Review> GetByIdAsync(int id);
         Task<bool> Add(Review review);
         Task<bool> Update(Review review);
         Task<bool> Delete(Review review);
         Task<bool> Save();
-        Task<Review> GetByIdWithComments(int id);
+        Task<Review> GetByIdWithCommentsAsync(int id);
+        Task<List<Review>> GetByUserWithAlbumAsync(string userId);
     }
 }

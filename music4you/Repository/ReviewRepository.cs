@@ -29,7 +29,7 @@ namespace music4you.Repository
             return await Save();
         }
 
-        public async Task<Review> GetById(int id)
+        public async Task<Review> GetByIdAsync(int id)
         {
             Review review = await _context.Reviews
                  .Include(a => a.AppUser)
@@ -37,7 +37,16 @@ namespace music4you.Repository
             return review;
         }
 
-        public async Task<Review> GetByIdWithComments(int id)
+        public async Task<List<Review>> GetByUserWithAlbumAsync(string userId)
+        {
+            List<Review> reviews = await _context.Reviews
+                .Include(a => a.Album)
+                .Where(b => b.AppUserId == userId)
+                .ToListAsync();
+            return reviews;
+        }
+
+        public async Task<Review> GetByIdWithCommentsAsync(int id)
         {
             Review review = await _context.Reviews
                  .Include(a => a.AppUser)
