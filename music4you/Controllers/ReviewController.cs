@@ -131,26 +131,30 @@ namespace music4you.Controllers
 
             if (user == null)
             {
-                return RedirectToAction("Error", "Error401");
+                return RedirectToAction("Error401", "Error");
             }
 
             Review review = await _reviewRepository.GetByIdWithCommentsAsync(id);
 
             if(review == null)
             {
-                return RedirectToAction("Error", "Error404");
+                return RedirectToAction("Error404", "Error");
             }
             if (user.Id != review.AppUserId)
             {
-                return RedirectToAction("Error", "Error403");
+                return RedirectToAction("Error403", "Error");
             }
 
             List<Comment> comments = review.Comments.ToList();
 
-            foreach(Comment comment in comments) 
+            if(comments.Count > 0)
             {
-                _commentRepository.Delete(comment);
+                foreach (Comment comment in comments)
+                {
+                    _commentRepository.Delete(comment);
+                }
             }
+            
 
             _reviewRepository.Delete(review);
             return RedirectToAction("Details", "Account");

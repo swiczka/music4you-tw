@@ -36,6 +36,12 @@ namespace music4you.Controllers
         public async Task<IActionResult> Details(int id)
         {
             Album album = await _albumRepository.GetByIdExtended(id);
+
+            if(album == null)
+            {
+                return RedirectToAction("Error404", "Error");
+            }
+
             string userId = _userManager.GetUserId(User);
 
             if(userId != null)

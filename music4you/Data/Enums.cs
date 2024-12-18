@@ -45,6 +45,10 @@ namespace music4you.Data
         Alternative,
         Ambient,
         [Display(Name = "Eksperymentalna")]
-        Experimental
+        Experimental,
+        [Display(Name = "New Wave")]
+        NewWave,
+        [Display(Name = "Disco Polo")]
+        DiscoPolo
     }
 }

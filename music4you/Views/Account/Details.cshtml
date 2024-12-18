@@ -36,6 +36,10 @@
 
                 <h1 class="display-6 fw-normal">Napisane recenzje</h1>
                 <br />
+                @if(Model.Reviews.Count == 0)
+                {
+                    <p class="text-secondary"><i class="bi bi-info-circle p-3"></i>   Wygląda na to, że nie napisałeś jeszcze żadnej recenzji!</p>
+                }
                 @foreach (Review review in Model.Reviews)
                 {
                     <div class="mb-3">
@@ -75,16 +79,16 @@
                             <div class="d-flex justify-content-between p-2">
                                 <div>
                                     <a type="button" class="btn btn-outline-dark" asp-controller="Review" asp-action="Edit" asp-route-id="@review.Id">Edytuj <i class="bi bi-pencil-fill"></i></a>
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-@review.Id">
                                         Usuń <i class="bi bi-trash3-fill"></i>
                                     </button>
 
                                     <!-- Modal potwierdzenia -->
-                                    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="confirmDeleteModal-@review.Id" tabindex="-1" aria-labelledby="confirmDeleteModalLabel-@review.Id" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="confirmDeleteModalLabel">Hola hola!</h5>
+                                                    <h5 class="modal-title" id="confirmDeleteModalLabel-@review.Id">Hola hola!</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>
                                                 </div>
                                                 <div class="modal-body">

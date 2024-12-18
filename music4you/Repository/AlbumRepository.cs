@@ -26,7 +26,7 @@ namespace music4you.Repository
         {
             var albums = await _context.Albums
                 .Include (a => a.Ratings)
-                .Where(a => a.Name.Contains(name)).ToListAsync();
+                .Where(a => a.Name.Contains(name) || a.Author.Contains(name)).ToListAsync();
             return albums;
         }
 
