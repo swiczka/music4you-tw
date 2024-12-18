@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using music4you.Interface;
+using music4you.Migrations;
 using music4you.Models;
 using music4you.ViewModels;
 
@@ -11,12 +12,17 @@ namespace music4you.Controllers
         private readonly IReviewRepository _reviewRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly IAlbumRepository _albumRepository;
+        private readonly ICommentRepository _commentRepository;
 
-        public ReviewController(IReviewRepository reviewRepository, UserManager<AppUser> userManager, IAlbumRepository albumRepository)
+        public ReviewController(IReviewRepository reviewRepository, 
+                                UserManager<AppUser> userManager, 
+                                IAlbumRepository albumRepository,
+                                ICommentRepository commentRepository)
         {
             _reviewRepository = reviewRepository;
             _userManager = userManager;
             _albumRepository = albumRepository;
+            _commentRepository = commentRepository;
         }
 
         public async Task<IActionResult> Create(int albumId)
@@ -68,6 +74,86 @@ namespace music4you.Controllers
             vm.Album = album;
             return View(vm);
 
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            AppUser user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return RedirectToAction("Error", "Error401");
+            }
+
+            Review review = await _reviewRepository.GetByIdWithAlbumAsync(id);
+
+            if(user.Id != review.AppUserId)
+            {
+                return RedirectToAction("Error", "Error403");
+            }
+
+            ReviewEditViewModel vm = new ReviewEditViewModel()
+            {
+                Id = review.Id,
+                AlbumId = review.AlbumId,
+                Album = review.Album,
+                Content = review.Content,
+                Title = review.Title,
+                Value = review.Value,
+                CreatedAt = review.CreatedAt
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(ReviewEditViewModel vm)
+        {
+            if(!ModelState.IsValid) 
+            {
+                return View(vm);
+            }
+
+            Review review = await _reviewRepository.GetByIdAsync(vm.Id);
+
+            review.Content = vm.Content;
+            review.Title = vm.Title;
+            review.Value = vm.Value;
+            review.Id = vm.Id;
+
+            await _reviewRepository.Update(review);
+            return RedirectToAction("Details", "Account");
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            AppUser user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return RedirectToAction("Error", "Error401");
+            }
+
+            Review review = await _reviewRepository.GetByIdWithCommentsAsync(id);
+
+            if(review == null)
+            {
+                return RedirectToAction("Error", "Error404");
+            }
+            if (user.Id != review.AppUserId)
+            {
+                return RedirectToAction("Error", "Error403");
+            }
+
+            List<Comment> comments = review.Comments.ToList();
+
+            foreach(Comment comment in comments) 
+            {
+                _commentRepository.Delete(comment);
+            }
+
+            _reviewRepository.Delete(review);
+            return RedirectToAction("Details", "Account");
         }
 
         public async Task<IActionResult> Details(int id)

@@ -11,5 +11,6 @@ namespace music4you.Interface
         Task<bool> Save();
         Task<Review> GetByIdWithCommentsAsync(int id);
         Task<List<Review>> GetByUserWithAlbumAsync(string userId);
+        Task<Review> GetByIdWithAlbumAsync(int id);
     }
 }
