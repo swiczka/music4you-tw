@@ -82,14 +82,14 @@ namespace music4you.Controllers
 
             if (user == null)
             {
-                return RedirectToAction("Error", "Error401");
+                return RedirectToAction("Error401", "Error");
             }
 
             Review review = await _reviewRepository.GetByIdWithAlbumAsync(id);
 
             if(user.Id != review.AppUserId)
             {
-                return RedirectToAction("Error", "Error403");
+                return RedirectToAction("Error403", "Error");
             }
 
             ReviewEditViewModel vm = new ReviewEditViewModel()

@@ -15,7 +15,7 @@ namespace music4you.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "Album");
         }
 
         public IActionResult Privacy()

@@ -24,10 +24,11 @@
     </div>
 </section>
 <form method="get" asp-action="Index">
-    <div class="input-group mb-3 w-25 mx-auto">
-        <input type="text" class="form-control" placeholder="Wpisz nazwę albumu..." name="search" value="@Context.Request.Query["search"]"/>
+    <div class="input-group mb-3 mx-auto" style="max-width: 500px;">
+        <input type="text" class="form-control" placeholder="Wpisz nazwę albumu..." name="search" value="@Context.Request.Query["search"]" />
         <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
     </div>
+
 </form>
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
