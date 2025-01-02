@@ -7,148 +7,136 @@
 @model AlbumViewModel
 
 <div class="main-container">
-    <section class="bg-white space-sm">
-        <div class="container">
-            <div class="row gx-5">
-                <div class="col-lg-4 mb-4 shadow rounded">
-                    <img alt="Image" id="mainImage" src="@Model.ImageUrl" class="rounded img-fluid mt-4 album-card" style="width: 100%;" />
-                    <p class="lead mt-4"><b><i class="bi bi-person"></i> Wykonawca:</b> @Model.Author</p>
-                    <p class="lead"><b><i class="bi bi-pen"></i> Nazwa:</b> @Model.Name</p>
-                    <p class="lead"><b><i class="bi bi-star"></i> Rok wydania:</b> @Model.Year</p>
-                    <p class="lead"><b><i class="bi bi-book"></i> Gatunek:</b> @Model.Genre</p>
-                    <i class="lead"><b><i class="bi bi-hand-thumbs-up"></i> Ocena użytkowników </b>(@Model.Ratings.Count):</i>
-                    @if (Model.Ratings == null || Model.Ratings.Count == 0)      
+    <section class="py-2">
+        <div class="container mx-auto px-2">
+            <div class="grid-cols-1 grid gap-10 md:grid-cols-2 lg:grid-cols-3">
+                <!-- Left Column -->
+                <div class="overflow-hidden rounded bg-white shadow">
+                    <img alt="Image" id="mainImage" src="@Model.ImageUrl" class="h-auto w-full rounded-t object-cover" />
+                    <div class="p-4">
+                        <p class="mb-1 mt-1 text-lg"><b><i class="bi bi-person"></i> Wykonawca:</b> @Model.Author</p>
+                        <p class="mb-1 text-lg"><b><i class="bi bi-pen"></i> Nazwa:</b> @Model.Name</p>
+                        <p class="mb-1 text-lg"><b><i class="bi bi-star"></i> Rok wydania:</b> @Model.Year</p>
+                        <p class="mb-1 text-lg"><b><i class="bi bi-book"></i> Gatunek:</b> @Model.Genre</p>
+                        <p class="text-lg"><i class="bi bi-hand-thumbs-up"></i> <b>Ocena użytkowników </b>(@Model.Ratings.Count):</p>
+
+                        @if (Model.Ratings == null || Model.Ratings.Count == 0)
+                        {
+                            <div class="mt-2 flex justify-center space-x-1">
+                                @for (int i = 0; i < 10; i++)
+                                {
+                                    <i class="bi bi-star text-2xl text-yellow-500"></i>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            double avg = Model.Ratings.Average(a => a.Value);
+                            double roundedAvg = Math.Round(avg * 2, MidpointRounding.AwayFromZero) / 2;
+                            int fullStars = (int)roundedAvg;
+                            bool hasHalfStar = roundedAvg - fullStars >= 0.5;
+
+                            <div class="mt-2 flex justify-center space-x-1">
+                                @for (int j = 0; j < fullStars; j++)
+                                {
+                                    <i class="bi bi-star-fill text-2xl text-yellow-500"></i>
+                                }
+                                @if (hasHalfStar)
+                                {
+                                    <i class="bi bi-star-half text-2xl text-yellow-500"></i>
+                                    for (int i = fullStars + 1; i < 10; i++)
+                                    {
+                                        <i class="bi bi-star text-2xl text-yellow-500"></i>
+                                    }
+                                }
+                                else
+                                {
+                                    for (int i = fullStars; i < 10; i++)
+                                    {
+                                        <i class="bi bi-star text-2xl text-yellow-500"></i>
+                                    }
+                                }
+                            </div>
+                        }
+
+                        <hr class="my-4" />
+                        @if (Model.UserRating == null)
+                        {
+                            <p class="text-lg font-semibold">Wystaw ocenę albumu:</p>
+                            <div class="flex justify-center">
+                                @for (int i = 0; i < 10; i++)
+                                {
+                                    <a asp-area="" asp-controller="Rating" asp-action="Create" asp-route-albumId="@Model.Id" asp-route-value="@(i+1)" class="bi bi-star m-0.5 text-2xl text-yellow-500 hover:scale-110 hover:text-yellow-600"></a>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-lg font-semibold">Zmień ocenę albumu:</p>
+                            <div class="flex justify-center text-blue-500">
+                                @for (int i = 0; i < Model.UserRating.Value; i++)
+                                {
+                                    <a asp-area="" asp-controller="Rating" asp-action="Update" asp-route-albumId="@Model.Id" asp-route-ratingId="@Model.UserRating.Id" asp-route-value="@(i+1)" class="bi bi-star-fill m-0.5 text-2xl text-yellow-500 hover:scale-110 hover:text-yellow-600"></a>
+                                }
+                                @for (int i = Model.UserRating.Value; i < 10; i++)
+                                {
+                                    <a asp-area="" asp-controller="Rating" asp-action="Update" asp-route-albumId="@Model.Id" asp-route-ratingId="@Model.UserRating.Id" asp-route-value="@(i+1)" class="bi bi-star m-0.5 text-2xl text-yellow-500 hover:scale-110 hover:text-yellow-600"></a>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="lg:col-span-2">
+                    @if (ViewData["Error"] != null)
                     {
-                        <div class="text-center">
-                            @for (int i = 0; i < 10; i++)
-                            {
-                                <i class="bi bi-star text-warning" style="font-size: 30px;"></i>
-                            }
+                        <div class="mb-4 rounded bg-red-500 p-3 text-white">
+                            <p>@ViewData["Error"]</p>
                         </div>
                     }
-                    else
-                    {
-                        double avg = Model.Ratings.Average(a => a.Value);
-                        double roundedAvg = Math.Round(avg * 2, MidpointRounding.AwayFromZero) / 2;
-                        int fullStars = (int)roundedAvg;
-                        bool hasHalfStar = roundedAvg - fullStars >= 0.5;
 
-                        <div class="text-center">
-                            @for(int j = 0; j < fullStars; j++)
+                    <h2 class="mb-4 font-sans text-2xl">Wybrane recenzje albumu</h2>
+
+                    @foreach (Review review in Model.Reviews)
+                    {
+                        <div class="mb-4 rounded bg-white p-4 shadow">
+                            <div class="mb-2 flex items-center justify-between">
+                                <p class="text-sm text-gray-600">Autor: @review.AppUser.UserName <span class="text-gray-400">(@review.CreatedAt.ToShortDateString())</span></p>
+                                <div class="flex space-x-1">
+                                    @for (int i = 0; i < review.Value; i++)
+                                    {
+                                        <i class="bi bi-star-fill text-xl text-yellow-500"></i>
+                                    }
+                                    @for (int i = review.Value; i < 10; i++)
+                                    {
+                                        <i class="bi bi-star text-xl text-yellow-500"></i>
+                                    }
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-semibold">@review.Title</h3>
+                            @if (review.Content.Length > 500)
                             {
-                                <i class="bi bi-star-fill text-warning" style="font-size: 30px;"></i>
-                            }
-                            @if (hasHalfStar)
-                            {
-                                <i class="bi bi-star-half text-warning" style="font-size: 30px;"></i>
-                                for(int i = fullStars + 1; i < 10; i++)
-                                {
-                                    <i class="bi bi-star text-warning" style="font-size: 30px;"></i>
-                                }
+                                <p>@review.Content.Substring(0, 500) ...</p>
                             }
                             else
                             {
-                                for (int i = fullStars; i < 10; i++)
-                                {
-                                    <i class="bi bi-star text-warning" style="font-size: 30px;"></i>
-                                }
+                                <p>@review.Content</p>
                             }
-                        </div>
-                    }
-                    <hr/>
-                    @if(Model.UserRating == null)
-                    {
-                        <i class="lead"><b>Wystaw ocenę albumu:</b></i>
-                        <div class="text-center">
-                            @for (int i = 0; i < 10; i++)
-                            {
-                                <a asp-area="" asp-controller="Rating" asp-action="Create" asp-route-albumId="@Model.Id" asp-route-value="@(i+1)" class="bi bi-star text-warning" style="font-size: 30px;"></a>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <i class="lead"><b>Zmień ocenę albumu:</b></i>
-                        <div class="text-center text-info">
-                            @for (int i = 0; i < Model.UserRating.Value; i++)
-                            {
-                                <a asp-area="" asp-controller="Rating" asp-action="Update" asp-route-albumId="@Model.Id" asp-route-ratingId="@Model.UserRating.Id" asp-route-value="@(i+1)" class="bi bi-star-fill text-warning" style="font-size: 30px;"></a>
-                            }
-                            @for (int i = Model.UserRating.Value; i < 10; i++)
-                            {
-                                <a asp-area="" asp-controller="Rating" asp-action="Update" asp-route-albumId="@Model.Id" asp-route-ratingId="@Model.UserRating.Id" asp-route-value="@(i+1)" class="bi bi-star text-warning" style="font-size: 30px;"></a>
-                            }
-                        </div>
-                    }
-
-                    
-                </div>
-                
-                
-
-                <div class="col-lg-8 d-flex flex-column mr-auto ml-auto">
-                    @if (ViewData["Error"] != null)
-                    {
-                        <div class="alert-danger">
-                            <p class="alert-danger">@ViewData["Error"]</p>
-                        </div>
-                    }
-
-                    <h2 class="mb-3">Wybrane recenzje albumu</h2>
-
-                    @foreach(Review review in Model.Reviews)
-                    {
-                        <div class="mb-3">
-                            <div class="container shadow rounded">
-                                <div class="d-flex justify-content-between">
-                                    <div class="mt-4">
-                                        <p>Autor: @review.AppUser.UserName    <span class="text-muted">     (@review.CreatedAt.ToShortDateString())</span></p>
-                                    </div>
-
-                                    <div class="mt-3">
-                                        @for (int i = 0; i < review.Value; i++)
-                                        {
-                                            <i class="bi bi-star-fill text-warning" style="font-size: 30px;"></i>
-                                        }
-                                        @for (int i = review.Value; i < 10; i++)
-                                        {
-                                            <i class="bi bi-star text-warning" style="font-size: 30px;"></i>
-                                        }
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h3>@review.Title</h3>
-                                    @if(review.Content.Length > 500)
-                                    {
-                                        <p>@review.Content.Substring(0, 500) ...</p>
-                                    }
-                                    else
-                                    {
-                                        <p>@review.Content</p>
-                                    }
-
-                                </div>
-                                <div class="p-2 text-end">
-                                    <a asp-area="" asp-controller="Review" asp-action="Details" asp-route-id="@review.Id">Czytaj całość</a>
-                                </div>
+                            <div class="mt-2 text-right">
+                                <a asp-area="" asp-controller="Review" asp-action="Details" asp-route-id="@review.Id" class="font-semibold hover:text-blue-700">Czytaj całość <i class="bi bi-chevron-right"></i></a>
                             </div>
                         </div>
                     }
-                    <div class="form-control-plaintext text-center">
-                        <a type="button" class="btn btn-primary" asp-area="" asp-controller="Review" asp-action="Create" asp-route-albumId="@Model.Id">Dodaj recenzję</a>
+                    <div class="mt-4 text-center">
+                        <a class="rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700" asp-area="" asp-controller="Review" asp-action="Create" asp-route-albumId="@Model.Id"><i class="bi bi-plus-lg"></i> Dodaj recenzję</a>
                     </div>
-              
-                    
                 </div>
-                <!--end of col-->
             </div>
-            <!--end of row-->
         </div>
-        <!--end of container-->
     </section>
-    <!--end of section-->
-    <section class="bg-white space-sm">
+
+    <section class="py-4">
         <hr />
     </section>
 </div>

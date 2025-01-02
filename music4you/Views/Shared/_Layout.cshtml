@@ -25,31 +25,29 @@
                 <div class="hidden w-full md:block md:w-auto" id="navbar-multi-level">
                     <ul class="flex flex-col rounded-lg p-4 font-medium md:mt-0 md:flex-row md:space-x-8 md:border-0 md:p-0">
                         <li>
-                            <a asp-controller="Album" asp-action="Index" class="block rounded px-3 py-1 text-gray-900 hover:bg-gray-100 md:p-0 md:hover:bg-transparent md:hover:text-blue-700">Albumy</a>
+                            <a asp-controller="Album" asp-action="Index" class="block rounded px-3 py-1 text-gray-900 hover:bg-gray-100 md:p-0 md:hover:bg-transparent md:hover:text-blue-700"><i class="bi bi-disc-fill"></i> Albumy</a>
                         </li>
                         <li>
-                            <a asp-controller="Album" asp-action="Create" class="block rounded px-3 py-1 text-gray-900 hover:bg-gray-100 md:p-0 md:hover:bg-transparent md:hover:text-blue-700">Dodaj album</a>
+                            <a asp-controller="Album" asp-action="Create" class="block rounded px-3 py-1 text-gray-900 hover:bg-gray-100 md:p-0 md:hover:bg-transparent md:hover:text-blue-700"><i class="bi bi-plus-lg"></i> Dodaj album</a>
                         </li>
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="relative">
                                 <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar" class="flex w-full items-center justify-between px-3 py-1 text-gray-900 hover:bg-gray-100 md:p-0 md:w-auto md:hover:bg-transparent md:hover:text-blue-700">
-                                    Konto <svg class="ms-2.5 h-2.5 w-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-                                    </svg>
+                                    <i class="bi bi-person-fill pr-1"></i> @User.Identity.Name <i class="bi bi-chevron-down pl-1"></i>
                                 </button>
                                 <!-- Dropdown menu -->
                                 <div id="dropdownNavbar" class="z-10 absolute hidden w-44 divide-y divide-gray-100 rounded-lg bg-white font-normal shadow">
                                     <ul class="py-2 text-sm font-medium text-gray-700" aria-labelledby="dropdownLargeButton">
                                         <li>
-                                            <a asp-controller="Account" asp-action="Details" class="block px-4 py-1 hover:bg-gray-100">Profil <i class="bi bi-person-fill text-secondary"></i></a>
+                                            <a asp-controller="Account" asp-action="Details" class="block px-4 py-1 hover:bg-gray-100"><i class="bi bi-person-fill text-secondary"></i> Profil</a>
                                         </li>
                                         <li>
-                                            <a asp-controller="Account" asp-action="Register" class="block px-4 py-1 hover:bg-gray-100">Utwórz konto <i class="bi bi-person-plus-fill text-secondary"></i></a>
+                                            <a asp-controller="Account" asp-action="Register" class="block px-4 py-1 hover:bg-gray-100"><i class="bi bi-person-plus-fill text-secondary"></i> Utwórz konto</a>
                                         </li>
                                     </ul>
                                     <div class="py-1">
-                                        <a asp-controller="Account" asp-action="Logout" class="block px-4 py-1 text-sm text-red-700 hover:bg-gray-100 hover:text-red-900">Wyloguj się <i class="bi bi-power text-secondary"></i></a>
+                                        <a asp-controller="Account" asp-action="Logout" class="block px-4 py-1 text-sm text-red-700 hover:bg-gray-100 hover:text-red-900"><i class="bi bi-power text-secondary"></i> Wyloguj się</a>
                                     </div>
                                 </div>
                             </li>
@@ -57,20 +55,18 @@
                         else
                         {
                             <li class="relative">
-                                <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar" class="flex w-full items-center justify-between px-3 py-1 text-gray-900 hover:bg-gray-100 md:p-0 md:w-auto md:hover:bg-transparent md:hover:text-blue-700">
-                                    Konto <svg class="ms-2.5 h-2.5 w-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-                                    </svg>
+                                <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar" class="flex w-full items-center px-3 py-1 text-gray-900 hover:bg-gray-100 md:p-0 md:w-auto md:hover:bg-transparent md:hover:text-blue-700">
+                                    <i class="bi bi-person-fill pr-1"></i> Konto <i class="bi bi-chevron-down pl-1"></i>
                                 </button>
                                 <!-- Dropdown menu -->
                                 <div id="dropdownNavbar" class="z-10 absolute hidden w-44 divide-y divide-gray-100 rounded-lg bg-white font-normal shadow">
                                     <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownLargeButton">
                                         <li>
-                                            <a asp-controller="Account" asp-action="Login" class="block px-4 py-2 hover:bg-gray-100">Zaloguj się <i class="bi bi-box-arrow-in-right"></i></a>
+                                            <a asp-controller="Account" asp-action="Login" class="block px-4 py-2 hover:bg-gray-100"><i class="bi bi-box-arrow-in-right"></i> Zaloguj się</a>
                                         </li>
                                     </ul>
                                     <div class="py-1">
-                                        <a asp-controller="Account" asp-action="Create" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Utwórz konto <i class="bi bi-person-plus-fill text-secondary"></i></a>
+                                        <a asp-controller="Account" asp-action="Register" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="bi bi-person-plus-fill text-secondary"></i> Utwórz konto</a>
                                     </div>
                                 </div>
                             </li>
@@ -91,7 +87,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - music4you - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - music4you - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 

@@ -72,14 +72,14 @@
                             }
                             <div class="text-center">
                                 <a class="text-secondary fst-italic" style="text-decoration: none;" asp-controller="Album" asp-action="Details" asp-route-id="@album.Id">@album.Author</a>
-                                <p><a class="card-title text-secondary lead text-center text-xl" style="text-decoration: none;" asp-controller="Album" asp-action="Details" asp-route-id="@album.Id">@album.Name</a></p>
+                                <p><a class="line-clamp-1 gray decoration-0 w-full text-xl font-semibold text-gray-600" asp-controller="Album" asp-action="Details" asp-route-id="@album.Id">@album.Name</a></p>
                             </div>
                             <div class="my-2 text-center">
                                 @if (album.Ratings == null || album.Ratings.Count() == 0)
                                 {
                                     @for (int i = 0; i < 10; i++)
                                     {
-                                        <i class="bi bi-star text-warning" style="font-size: 24px;"></i>
+                                        <i class="bi bi-star text-yellow-500" style="font-size: 24px;"></i>
                                     }
                                 }
                                 else
@@ -91,15 +91,15 @@
 
                                     @for (int j = 0; j < fullStars; j++)
                                     {
-                                        <i class="bi bi-star-fill text-warning" style="font-size: 24px;"></i>
+                                        <i class="bi bi-star-fill text-xl text-yellow-500"></i>
                                     }
                                     @if (hasHalfStar)
                                     {
-                                        <i class="bi bi-star-half text-warning" style="font-size: 24px;"></i>
+                                        <i class="bi bi-star-half text-xl text-yellow-500"></i>
                                     }
                                     for (int i = fullStars + (hasHalfStar ? 1 : 0); i < 10; i++)
                                     {
-                                        <i class="bi bi-star text-warning" style="font-size: 24px;"></i>
+                                        <i class="bi bi-star text-xl text-yellow-500"></i>
                                     }
                                 }
                             </div>

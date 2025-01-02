@@ -6,29 +6,31 @@
 }
 @model ReviewEditViewModel
 
-<h1>Edytuj recenzję albumu @Model.Album.Author - @Model.Album.Name </h1>
+<h1 class="text-3xl font-semibold">Edytuj recenzję albumu <i>@Model.Album.Author - @Model.Album.Name</i> </h1>
 
-<form method="post" asp-action="Edit">
-    <div class="form-group mb-3">
-        <label asp-for="Title"></label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
+<form method="post" asp-action="Edit" class="mx-auto mt-4 space-y-4 rounded px-6 pt-6">
+    <div class="mb-3">
+        <label asp-for="Title" class="block text-sm font-medium text-gray-700"></label>
+        <input asp-for="Title" class="mt-1 block w-full rounded border-gray-300 p-1 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+        <span asp-validation-for="Title" class="text-sm text-red-600"></span>
     </div>
 
-    <div class="form-group mb-3">
-        <label asp-for="Value"></label>
-        <input asp-for="Value" class="form-control" style="width: 70px;" />
-        <span asp-validation-for="Value" class="text-danger"></span>
+    <div class="mb-3">
+        <label asp-for="Value" class="block text-sm font-medium text-gray-700"></label>
+        <input asp-for="Value" class="mt-1 block w-10 rounded border-gray-300 p-1 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+        <span asp-validation-for="Value" class="text-sm text-red-600"></span>
     </div>
 
-    <div class="form-group mb-3">
-        <label asp-for="Content"></label>
-        <textarea asp-for="Content" class="form-control" rows="15"></textarea>
-        <span asp-validation-for="Content" class="text-danger"></span>
+    <div class="mb-3">
+        <label asp-for="Content" class="block text-sm font-medium text-gray-700"></label>
+        <textarea asp-for="Content" class="mt-1 block w-full rounded border-gray-300 p-1 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500" rows="15"></textarea>
+        <span asp-validation-for="Content" class="text-sm text-red-600"></span>
     </div>
 
     <div class="text-center">
-        <button type="submit" class="btn btn-outline-success">Zapisz <i class="bi bi-floppy2-fill"></i></button>
+        <button type="submit" class="rounded bg-blue-600 px-6 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2">
+            Zapisz <i class="bi bi-floppy2-fill"></i>
+        </button>
     </div>
 
     <input type="hidden" asp-for="AlbumId" value="@Model.Album.Id" />
