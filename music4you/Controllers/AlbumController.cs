@@ -5,6 +5,7 @@ using music4you.Interface;
 using music4you.Models;
 using music4you.Repository;
 using music4you.ViewModels;
+using System.Text;
 
 namespace music4you.Controllers
 {
@@ -82,16 +83,35 @@ namespace music4you.Controllers
             
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            AppUser user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            AlbumCreateViewModel vm = new AlbumCreateViewModel();
+            return View(vm);
         }
 
         [HttpPost]
-        public IActionResult Create(AlbumCreateViewModel vm)
+        public async Task<IActionResult> Create(AlbumCreateViewModel vm)
         {
+            AppUser user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             if (ModelState.IsValid)
             {
+                if(!(await ValidateImageAsync(vm.ImageUrl)))
+                {
+                    TempData["Error"] = "Podaj poprawny link do obrazka. Najczęściej kończy się na '.jpg', '.png', itd..";
+                    return View(vm);
+                }
                 Album newAlbum = new Album()
                 {
                     Name = vm.Name,
@@ -117,6 +137,33 @@ namespace music4you.Controllers
             {
                 return View(vm);
             }
+        }
+
+        private async Task<bool> ValidateImageAsync(string imageUrl)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Head, imageUrl);
+                    var response = await httpClient.SendAsync(request);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var contentType = response.Content.Headers.ContentType.MediaType;
+
+                        if (contentType.StartsWith("image/"))
+                        {
+                            return true;
+                        }
+                    }
+                }
+                catch
+                {
+                }
+            }
+
+            return false;
         }
     }
 }

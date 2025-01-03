@@ -4,18 +4,21 @@ using music4you.Data;
 using music4you.Interface;
 using music4you.Models;
 using music4you.ViewModels;
+using System.Text.RegularExpressions;
 
 namespace music4you.Controllers
 {
     public class AccountController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly IPasswordValidator<AppUser> _passwordValidator;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IReviewRepository _reviewRepository;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IReviewRepository reviewRepository)
+        public AccountController(UserManager<AppUser> userManager, IPasswordValidator<AppUser> passwordValidator, SignInManager<AppUser> signInManager, IReviewRepository reviewRepository)
         {
             _userManager = userManager;
+            _passwordValidator = passwordValidator;
             _signInManager = signInManager;
             _reviewRepository = reviewRepository;
         }
@@ -96,17 +99,40 @@ namespace music4you.Controllers
                 return View(registerVM);
             }
 
+            var userN = await _userManager.FindByNameAsync(registerVM.Username);
+            if(userN != null)
+            {
+                TempData["Error"] = "Konto o podanej nazwie użytkownika już istnieje";
+                return View(registerVM);
+            }
+
+            var tempUser = new AppUser();
+            var result = await _passwordValidator.ValidateAsync(_userManager, tempUser, registerVM.Password);
+
+            if (!result.Succeeded)
+            {
+                TempData["Error"] = "Hasło musi się składać z co najmniej 6 znaków, zawierać co najmniej jedną dużą literę, co najmniej jedną małą literę, co najmniej jedną cyfrę oraz co najmniej jeden znak specjalny.";
+                return View(registerVM);
+            }
+
             var newUser = new AppUser()
             {
-                UserName = registerVM.Email.Split('@')[0],
+                UserName = registerVM.Username,
                 Email = registerVM.Email,
             };
 
+            
             var newUserResponse = await _userManager.CreateAsync(newUser, registerVM.Password);
 
             if (newUserResponse.Succeeded)
             {
                 await _userManager.AddToRoleAsync(newUser, UserRoles.User);
+            }
+            else
+            {
+                var errors = string.Join(", ", newUserResponse.Errors.Select(e => e.Description));
+                TempData["Error"] = errors;
+                return View(registerVM);
             }
 
             return RedirectToAction("Index", "Home");

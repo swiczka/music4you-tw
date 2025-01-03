@@ -9,8 +9,8 @@
 
 @if (TempData["Error"] != null)
 {
-    <div class="col-md-12 alert alert-danger">
-        <span><b>Błąd!</b> - @TempData["Error"] </span>
+    <div class="mx-auto max-w-lg space-y-4 rounded-xl bg-red-200 p-3">
+        <span class="text-red-800"><b>Błąd!</b> - @TempData["Error"] </span>
     </div>
 }
 

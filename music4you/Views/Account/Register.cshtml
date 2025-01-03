@@ -9,8 +9,8 @@
 
 @if (TempData["Error"] != null)
 {
-    <div class="mx-auto max-w-lg space-y-4 rounded p-6 text-center">
-        <span class="rounded-full bg-red-200 p-2 text-red-800"><b>Błąd!</b> - @TempData["Error"] </span>
+    <div class="mx-auto max-w-lg space-y-4 rounded-xl bg-red-200 p-3">
+        <span class="text-red-800"><b>Błąd!</b> - @TempData["Error"] </span>
     </div>
 }
 
@@ -22,6 +22,11 @@
         <label asp-for="Email" class="block text-sm font-medium text-gray-700"></label>
         <input asp-for="Email" class="mt-1 block w-full rounded border-gray-300 p-1 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
         <span asp-validation-for="Email" class="text-sm text-red-600"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Username" class="block text-sm font-medium text-gray-700"></label>
+        <input asp-for="Username" class="mt-1 block w-full rounded border-gray-300 p-1 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+        <span asp-validation-for="Username" class="text-sm text-red-600"></span>
     </div>
     <div class="mb-3">
         <label asp-for="Password" class="block text-sm font-medium text-gray-700"></label>
