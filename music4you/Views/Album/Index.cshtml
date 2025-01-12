@@ -42,7 +42,7 @@
         {
             <h3 class="text-secondary lead text-center"><i class="bi bi-info-circle p-2"></i> Nie znaleziono takiego albumu...</h3>
         }
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-3">
             
             @foreach (Album album in Model)
             {
@@ -61,7 +61,7 @@
                             <a asp-controller="Album" asp-action="Details" asp-route-id="@album.Id">
                                 <img src="@url"
                                      alt="Obraz przedstawiający @album.Name"
-                                     class="h-full w-full object-cover" />
+                                     class="rounded-md object-cover card-img-top aspect-square" style="height: 340px;" />
                             </a>
                         </div>
                         <div class="card-body">
@@ -81,7 +81,7 @@
                                 {
                                     @for (int i = 0; i < 10; i++)
                                     {
-                                        <i class="bi bi-star text-yellow-500" style="font-size: 24px;"></i>
+                                        <i class="bi bi-star text-xl text-yellow-500"></i>
                                     }
                                 }
                                 else
