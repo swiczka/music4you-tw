@@ -34,6 +34,13 @@ namespace music4you.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+            var review = await _albumRepository.GetAlbumUserReview(user.Id, albumId);
+
+            if(review != null)
+            {
+                return Forbid();
+            }
+
             Album album = await _albumRepository.GetById(albumId);
 
             ReviewCreateViewModel vm = new ReviewCreateViewModel()
@@ -51,6 +58,13 @@ namespace music4you.Controllers
             if (user == null)
             {
                 return RedirectToAction("Login", "Account");
+            }
+
+            var reviewTest = await _albumRepository.GetAlbumUserReview(user.Id, vm.AlbumId);
+
+            if (reviewTest != null)
+            {
+                return Forbid();
             }
 
             if (ModelState.IsValid)

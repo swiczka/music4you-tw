@@ -14,7 +14,8 @@ namespace music4you.Controllers
         private readonly IAlbumRepository _albumRepository;
         private readonly UserManager<AppUser> _userManager;
 
-        public AlbumController(IAlbumRepository albumRepository, UserManager<AppUser> userManager) 
+        public AlbumController(IAlbumRepository albumRepository,
+                                UserManager<AppUser> userManager) 
         {
             _albumRepository = albumRepository;
             _userManager = userManager;
@@ -48,6 +49,9 @@ namespace music4you.Controllers
             if(userId != null)
             {
                 Rating userRating = await _albumRepository.GetUserRating(id, userId);
+                var review = await _albumRepository.GetAlbumUserReview(userId, album.Id);
+
+                bool isReviewed = (review != null);
 
                 AlbumViewModel vm = new AlbumViewModel()
                 {
@@ -59,7 +63,8 @@ namespace music4you.Controllers
                     ImageUrl = album.ImageUrl,
                     Ratings = album.Ratings.ToList(),
                     Reviews = album.Reviews.ToList(),
-                    UserRating = userRating
+                    UserRating = userRating,
+                    IsReviewed = isReviewed
                 };
                 return View(vm);
             }
@@ -74,13 +79,11 @@ namespace music4you.Controllers
                     Genre = album.Genre,
                     ImageUrl = album.ImageUrl,
                     Ratings = album.Ratings.ToList(),
-                    Reviews = album.Reviews.ToList()
+                    Reviews = album.Reviews.ToList(),
+                    IsReviewed = false
                 };
                 return View(vm);
             }
-            
-
-            
         }
 
         public async Task<IActionResult> Create()
@@ -91,6 +94,7 @@ namespace music4you.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
+
             AlbumCreateViewModel vm = new AlbumCreateViewModel();
             return View(vm);
         }

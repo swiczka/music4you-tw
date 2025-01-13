@@ -128,9 +128,12 @@
                             </div>
                         </div>
                     }
-                    <div class="mt-4 text-center">
-                        <a class="rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700" asp-area="" asp-controller="Review" asp-action="Create" asp-route-albumId="@Model.Id"><i class="bi bi-plus-lg"></i> Dodaj recenzję</a>
-                    </div>
+                    @if (!Model.IsReviewed)
+                    {
+                        <div class="mt-4 text-center">
+                            <a class="rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700" asp-area="" asp-controller="Review" asp-action="Create" asp-route-albumId="@Model.Id"><i class="bi bi-plus-lg"></i> Dodaj recenzję</a>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

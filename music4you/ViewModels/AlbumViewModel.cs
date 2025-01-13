@@ -15,5 +15,7 @@ namespace music4you.ViewModels
         public List<Rating> ?Ratings { get; set; }
         public List<Review> ?Reviews { get; set; }
         public Rating ?UserRating { get; set; }
+
+        public bool IsReviewed { get; set; } = false;
     }
 }

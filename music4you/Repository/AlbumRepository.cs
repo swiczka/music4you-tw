@@ -54,6 +54,12 @@ namespace music4you.Repository
             return album;
         }
 
+        public async Task<Review> GetAlbumUserReview(string userId, int albumId)
+        {
+            var review = await _context.Reviews.FirstOrDefaultAsync(r => r.AppUserId == userId && r.AlbumId == albumId);
+            return review;
+        }
+
         public bool Add(Album album)
         {
             _context.Albums.Add(album);

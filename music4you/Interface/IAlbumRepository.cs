@@ -13,5 +13,6 @@ namespace music4you.Interface
         Task<IEnumerable<Album>> GetFilteredByName(string name);
         Task<Rating> GetUserRating(int albumId, string userId);
         Task<Album> GetByIdExtended(int id);
+        Task<Review> GetAlbumUserReview(string userId, int albumId);
     }
 }
